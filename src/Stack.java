@@ -67,28 +67,6 @@ public class Stack<E> {
     }
 
     /**
-     * Inserts the maximum element of the specified iterable into this stack, using the natural order of its elements.
-     * <p>
-     * Note:
-     * The mnemonic for bounded wildcards is PECS: Producer-Extends-Consumer-Super
-     *
-     * @param elements an Iterable of Comparable elements; its elements must compatible with the elements in this stack
-     * @return this stack
-     * @throws NullPointerException   if the specified collection is null
-     * @throws NoSuchElementException if the collection is empty
-     * @throws ClassCastException     if the type of the elements in the collection is incompatible with this stack
-     */
-    public <T extends Comparable<? super T>> Stack<E> pushMax(Iterable<T> elements) {
-        Objects.requireNonNull(elements);
-        // This unchecked cast is documented. The client assumes responsibility about the type of
-        // elements in the collection
-        @SuppressWarnings("unchecked")
-        E max = (E) StreamSupport.stream(elements.spliterator(), false).max(Comparator.naturalOrder()).orElseThrow();
-        push(max);
-        return this;
-    }
-
-    /**
      * Inserts the maximum element of the specified iterable into this stack, using the specified comparator.
      * <p>
      * Note:
@@ -176,7 +154,6 @@ public class Stack<E> {
         Stack<Number> stack = new Stack<>();
         Iterable<Integer> integerElements = Set.of(1, 2, 3, 4, 5);
         Iterable<Double> doubleElements = Set.of(NaN, NEGATIVE_INFINITY, MIN_VALUE, -0.0, MAX_VALUE);
-        Iterable<String> stringElements = Set.of("a");
 
         // tests push(), peek(), pop(), isEmpty() and pushAll()
         System.out.println("\nFIRST TEST");
@@ -199,7 +176,6 @@ public class Stack<E> {
         // tests both versions of pushMax()
         System.out.println("\nTHIRD TEST");
         stack.pushMax(doubleElements, Comparator.reverseOrder())
-                .pushMax(doubleElements)
                 .pushMax(integerElements, Integer::compareTo);
         while (!stack.isEmpty()) {
             System.out.println(stack.pop());
